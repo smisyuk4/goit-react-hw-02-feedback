@@ -1,54 +1,64 @@
 import React, { Component } from "react";
-// import PropTypes from "prop-types";
-
+import PropTypes from "prop-types";
 export class App extends Component {
-    constructor() {
-    super();
-
-    this.state = {
-        good: 0,
-        neutral: 0,
-        bad: 0,
-    };
+  static defaultProps = {
+    good: 0,
+    neutral: 0,
+    bad: 0,
   }
 
-  // static propTypes = {
-  //   good: PropTypes.number.isRequired,
-  //   neutral: PropTypes.number.isRequired,
-  //   bad: PropTypes.number.isRequired,
-  // };
+  static propTypes = {
+    good: PropTypes.number.isRequired,
+    neutral: PropTypes.number.isRequired,
+    bad: PropTypes.number.isRequired,
+  };
 
-  increment = (event) => {
-    console.log("Increment button was clicked!", event); // працює
-    // console.log("this.props: ", this.state); // працює
+  state = {
+      good: this.props.good,
+      neutral: this.props.neutral,
+      bad: this.props.bad,
+  }; 
+
+  incrementGood = () => {
+    console.log(this.state)
+    this.setState(prevState => {
+      console.log(prevState)
+      return { good: prevState.good + 1 }
+    })
+  }
+
+  incrementNeutral = () => {
+    this.setState(prevState => {
+      return {neutral: prevState.neutral + 1}
+    })
+  }
+
+  incrementBad = () => {
+    this.setState(prevState => {
+      return {bad: prevState.bad + 1}
+    })
   }
 
   render() {
     return <section>
-      <FeedBackAgregator />
-      <Statistics feedback={this.state} />
-    </section>;
+            <FeedBackAgregator incrementGood={this.incrementGood} incrementNeutral={this.incrementNeutral} incrementBad={this.incrementBad} />
+            <Statistics state={this.state} />
+          </section>
   }
 }
 
-class FeedBackAgregator extends Component {
-  render() {
+const FeedBackAgregator = ({incrementGood, incrementNeutral, incrementBad}) => {
     return <div>
             <h1>Please leave feedback</h1>
       
-            <button type="button" aria-label="Good"
-              onClick={() => this.increment}
-            >
-              Good</button>
-            <button type="button" aria-label="Neutral">Neutral</button>
-            <button type="button" aria-label="Bad">Bad</button>
+            <button type="button" aria-label="Good" onClick={incrementGood}>Good</button>
+            <button type="button" aria-label="Neutral" onClick={incrementNeutral}>Neutral</button>
+            <button type="button" aria-label="Bad" onClick={incrementBad}>Bad</button>
           </div>
-  }
 }
-class Statistics extends Component {
-  render() {
-    const { good, neutral, bad } = this.props.feedback
 
+const Statistics = ({ state }) => {
+  const {good, neutral, bad} = state
     return <div>
       <h2 hidden>Statistics</h2>
       <ul>
@@ -57,5 +67,4 @@ class Statistics extends Component {
         <li>Bad: <span>{bad}</span></li>
       </ul>
     </div>
-  } 
 }
