@@ -5,24 +5,18 @@ export class App extends Component {
     good: 0,
     neutral: 0,
     bad: 0,
-    total: 0,
-    positivePercentage: 0,
   }
 
   static propTypes = {
     good: PropTypes.number.isRequired,
     neutral: PropTypes.number.isRequired,
     bad: PropTypes.number.isRequired,
-    total: PropTypes.number.isRequired,
-    positivePercentage: PropTypes.number.isRequired,
   };
 
   state = {
       good: this.props.good,
       neutral: this.props.neutral,
       bad: this.props.bad,
-      total: this.props.total,
-      positivePercentage: this.props.positivePercentage,
   }; 
 
   incrementGood = () => {
@@ -45,30 +39,16 @@ export class App extends Component {
     })
   }
 
-  countTotalFeedback = () => {
-    this.setState(prevState => {
-      const sum = prevState.good + prevState.neutral + prevState.bad
-      return {total: sum}
-    })
-  }
-
-  countPositiveFeedbackPercentage = () => {
-    this.setState(prevState => {
-      const percentage = prevState.good * 100 / prevState.total
-      return {positivePercentage: percentage}
-    })
-  }
-
   render() {
     return <section>
-            <FeedBackAgregator countTotalFeedback={this.countTotalFeedback} incrementGood={this.incrementGood} incrementNeutral={this.incrementNeutral} incrementBad={this.incrementBad} />
-            <Statistics state={this.state} countPositiveFeedbackPercentage={this.countPositiveFeedbackPercentage } />
+            <FeedBackAgregator incrementGood={this.incrementGood} incrementNeutral={this.incrementNeutral} incrementBad={this.incrementBad} />
+            <Statistics state={this.state}/>
           </section>
   }
 }
 
-const FeedBackAgregator = ({incrementGood, incrementNeutral, incrementBad, countTotalFeedback}) => {
-    return <div onClick={countTotalFeedback}>
+const FeedBackAgregator = ({incrementGood, incrementNeutral, incrementBad}) => {
+    return <div>
             <h1>Please leave feedback</h1>
       
             <button type="button" aria-label="Good" onClick={incrementGood}>Good</button>
@@ -78,7 +58,11 @@ const FeedBackAgregator = ({incrementGood, incrementNeutral, incrementBad, count
 }
 
 const Statistics = ({ state }) => {
-  const {good, neutral, bad, total, positivePercentage} = state
+  const {good, neutral, bad} = state
+
+  const total = countTotalFeedback(good, neutral, bad)
+  const positivePercentage = countPositiveFeedbackPercentage(good, total)
+
     return <div>
       <h2 hidden>Statistics</h2>
       <ul>
@@ -89,4 +73,12 @@ const Statistics = ({ state }) => {
         <li>Positive percentage: <span>{positivePercentage}</span></li>
       </ul>
     </div>
+}
+
+const countTotalFeedback = (good, neutral, bad) => {
+  return good + neutral + bad
+}
+
+const countPositiveFeedbackPercentage = (good, total) => {
+  return Math.round(good * 100 / total)
 }
