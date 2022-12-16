@@ -1,5 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Statistics } from "./Statistics"
+import { FeedBackOptions } from "./FeedbackOptions"
+import { Title } from "./Title";
+import { countTotalFeedback } from "utils";
+
 export class App extends Component {
   static defaultProps = {
     good: 0,
@@ -40,45 +45,13 @@ export class App extends Component {
   }
 
   render() {
+    // const sum = countTotalFeedback(this.good, this.neutral, this.bad)
+
     return <section>
-            <FeedBackAgregator incrementGood={this.incrementGood} incrementNeutral={this.incrementNeutral} incrementBad={this.incrementBad} />
-            <Statistics state={this.state}/>
+            <Title title="Please leave feedback" children={<FeedBackOptions incrementGood={this.incrementGood} incrementNeutral={this.incrementNeutral} incrementBad={this.incrementBad}/> } />
+
+            <Title title="Statistics" children={<Statistics state={this.state}/> } />
+            
           </section>
   }
-}
-
-const FeedBackAgregator = ({incrementGood, incrementNeutral, incrementBad}) => {
-    return <div>
-            <h1>Please leave feedback</h1>
-      
-            <button type="button" aria-label="Good" onClick={incrementGood}>Good</button>
-            <button type="button" aria-label="Neutral" onClick={incrementNeutral}>Neutral</button>
-            <button type="button" aria-label="Bad" onClick={incrementBad}>Bad</button>
-          </div>
-}
-
-const Statistics = ({ state }) => {
-  const {good, neutral, bad} = state
-
-  const total = countTotalFeedback(good, neutral, bad)
-  const positivePercentage = countPositiveFeedbackPercentage(good, total)
-
-    return <div>
-      <h2 hidden>Statistics</h2>
-      <ul>
-        <li>Good: <span>{good}</span></li>
-        <li>Neutral: <span>{neutral}</span></li>
-        <li>Bad: <span>{bad}</span></li>
-        <li>Total feedbacks: <span>{total}</span></li>
-        <li>Positive percentage: <span>{positivePercentage}</span></li>
-      </ul>
-    </div>
-}
-
-const countTotalFeedback = (good, neutral, bad) => {
-  return good + neutral + bad
-}
-
-const countPositiveFeedbackPercentage = (good, total) => {
-  return Math.round(good * 100 / total)
 }
