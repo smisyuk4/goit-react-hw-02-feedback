@@ -4,6 +4,7 @@ import { Statistics } from "./Statistics"
 import { FeedBackOptions } from "./FeedbackOptions"
 import { Title } from "./Title";
 import { countTotalFeedback } from "utils";
+import { Notification } from "./Notification";
 
 export class App extends Component {
   static defaultProps = {
@@ -25,9 +26,7 @@ export class App extends Component {
   }; 
 
   incrementGood = () => {
-    console.log(this.state)
     this.setState(prevState => {
-      console.log(prevState)
       return { good: prevState.good + 1 }
     })
   }
@@ -45,13 +44,17 @@ export class App extends Component {
   }
 
   render() {
-    // const sum = countTotalFeedback(this.good, this.neutral, this.bad)
+    const sum = countTotalFeedback(this.state.good, this.state.neutral, this.state.bad)
 
     return <section>
             <Title title="Please leave feedback" children={<FeedBackOptions incrementGood={this.incrementGood} incrementNeutral={this.incrementNeutral} incrementBad={this.incrementBad}/> } />
-
-            <Title title="Statistics" children={<Statistics state={this.state}/> } />
-            
+            {
+              sum > 0
+                ?
+                <Title title="Statistics" children={<Statistics state={this.state} />} />
+                :
+                <Title title="Statistics" children={<Notification message="There is no feedback"/>} />
+            }           
           </section>
   }
 }
