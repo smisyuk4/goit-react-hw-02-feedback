@@ -35,3 +35,14 @@ state = {
 Розшир функціонал застосунку таким чином, щоб блок статистики рендерився тільки після того, 
 як було зібрано хоча б один відгук. 
 Повідомлення про відсутність статистики винеси в компонент <Notification message="There is no feedback">.
+
+
+
+Крок 5
+Стилізація через Emotion 
+https://www.youtube.com/watch?v=Itl8A6g4p4Y
+https://emotion.sh/docs/introduction
+https://emotion.sh/docs/styled
+
+npm i @emotion/styled @emotion/react
+

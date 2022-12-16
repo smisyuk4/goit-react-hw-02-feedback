@@ -1,6 +1,8 @@
-export const Title = ({title, children}) => {
+import {TitleSection}  from "./Title.styled"
+
+export const Title = ({ title, children }) => {
     return <div>
-            <h2>{title}</h2>
+            <TitleSection>{title}</TitleSection>
             {children}
         </div>
 }

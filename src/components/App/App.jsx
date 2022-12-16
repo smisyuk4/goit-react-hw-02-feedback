@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Statistics } from "./Statistics"
-import { FeedBackOptions } from "./FeedbackOptions"
-import { Title } from "./Title";
+import { Statistics } from "../Statistics"
+import { FeedBackOptions } from "../FeedbackOptions"
+import { Title } from "../Title";
 import { countTotalFeedback } from "utils";
-import { Notification } from "./Notification";
+import { Notification } from "../Notification";
+import { FeedbackSection } from "./App.styled"
 
 export class App extends Component {
   static defaultProps = {
@@ -46,15 +47,15 @@ export class App extends Component {
   render() {
     const sum = countTotalFeedback(this.state.good, this.state.neutral, this.state.bad)
 
-    return <section>
-            <Title title="Please leave feedback" children={<FeedBackOptions incrementGood={this.incrementGood} incrementNeutral={this.incrementNeutral} incrementBad={this.incrementBad}/> } />
-            {
-              sum > 0
-                ?
-                <Title title="Statistics" children={<Statistics state={this.state} />} />
-                :
-                <Title title="Statistics" children={<Notification message="There is no feedback"/>} />
-            }           
-          </section>
+    return <FeedbackSection>
+              <Title title="Please leave feedback" children={<FeedBackOptions incrementGood={this.incrementGood} incrementNeutral={this.incrementNeutral} incrementBad={this.incrementBad}/> } />
+              {
+                sum > 0
+                  ?
+                  <Title title="Statistics" children={<Statistics state={this.state} />} />
+                  :
+                  <Title title="Statistics" children={<Notification message="There is no feedback"/>} />
+              }           
+          </FeedbackSection>
   }
 }
